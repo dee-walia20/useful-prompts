@@ -28,7 +28,7 @@ human_template = '''Use the provided <Question> and <Context> with Source separa
     Step-1: Generate an <Answer> based solely on provided <Context> and user <Question>. Use <answer_format> syntax mentioned below for <Answer> formulation.
     Step-2: Create and answer set of verification questions based on this <Answer> to check for accuracy. Think it through and make sure you are extremely accurate based on the <Question> asked.
     Step-3: After answering each verification question, consider these answers and revise the intial <Answer> to formulate a final, verified <Answer>. Ensure the final <Answer> reflects the accuracy and findings from the verification process. Use <answer_format> syntax mentioned below for <Answer> formulation.
-    Step-4: If you are not absolutely sure about the <Answer>, then use a standard response- "Sorry, I am not familiar with the question. You can try another question or Please check following support pages: [contact](https://www.nyc.gov/site/mocs/about/contact-mocs.page) or [help page https://www.nyc.gov/site/mocs/about/help.page)". 
+    Step-4: If you are not absolutely sure about the <Answer>, then use a standard response- "Sorry, I am not familiar with the question. You can try another question or Please check following support pages: xyz.com". 
     
     Remember DO NOT MENTION the steps in your final <Answer>.
     
@@ -42,4 +42,52 @@ human_template = '''Use the provided <Question> and <Context> with Source separa
     </answer_format> 
 
     <Answer>:'''
+```
+
+### Question Answer Generation Prompting
+#### Long QA
+```
+system_template_long_qa = '''Your role is to generate question answer pairs from given document.'''    
+
+human_template_long_qa = '''Given the [Document], create a set of [Question] and [Answer] pairs that are grounded in the main points of the 
+[Document], don't add any additional information that is not in the [Document]. The [Question] is by an information-seeking User and the [Answer] 
+is provided by a helping AI Agent. [Document] will be related to xyz domain. Create [Question], where [Answer] requires detailed steps in bullet points explaining process more than 500 words. Number of [Question] [Answer] pair should be determined to cover all the main points in the [Document]. DO NOT repeat [Question]. Keep Output format as below.
+
+<format>
+[Question]:
+[Answer]:
+##
+[Question]:
+[Answer]:
+</format>
+
+[Document] 
+{document} 
+
+Output:'''
+```
+
+#### Short QA
+```
+system_template_short_qa = '''Your role is to generate question answer pairs from given procurement document.'''    
+
+human_template_short_qa = '''Given the [Document], create set of 5-10 [Question] and [Answer] pairs that are grounded in the main points of the 
+document, don't add any additional information that is not in the document. The [Question] is by an information-seeking User and the [Answer] 
+is provided by a helping AI Agent. [Document] will be related to xyz domain. Create [Question] where [Answer] requires long answer (2-6 sentences) amd looking for brief explanation/Yes-No/definition/general information etc. DO NOT REPEAT SIMILAR [Question] to [Previous Questions] list. Create NEW [Question] covering other points and Number of [Question] [Answer] pair should be determined to cover all these other points from the [Document]. Keep Output format as below.
+
+<format>
+[Question]:
+[Answer]:
+##
+[Question]:
+[Answer]:
+</format>
+
+[Document] 
+{document} 
+
+[Previous Questions]
+{previous_questions}
+
+Output:'''
 ```
